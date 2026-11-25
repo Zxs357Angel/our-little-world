@@ -274,7 +274,7 @@ pincel.imageSmoothingEnabled = false;
 
 const bosque = new Image();
 
-bosque.src = "assets/escenarios/fondos/bosque.png";
+bosque.src = "assets/escenarios/fondos/Bosque.png";
 
 bosque.onerror = () => {
     console.error(
