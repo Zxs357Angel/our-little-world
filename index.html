@@ -1,0 +1,550 @@
+
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Un pequeño videojuego creado con amor.">
+    <title>Our Little World</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#171426">
+<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+
+<body>
+
+<main id="juego">
+
+    <!-- BIENVENIDA -->
+    <section id="pantalla-inicio">
+        <h1>Our Little World</h1>
+        <p>Un pequeño mundo creado para nosotros.</p>
+        <button id="boton-iniciar">Comenzar aventura</button>
+    </section>
+
+    <!-- SELECCIÓN DE PERSONAJE -->
+    <section id="pantalla-personajes" class="oculto">
+        <h1>Elige tu personaje</h1>
+        <p>¿Con quién quieres explorar nuestro mundo?</p>
+
+        <div id="opciones-personajes">
+            <button class="tarjeta-personaje" data-personaje="Zxs_Angel">
+                <img src="assets/personajes/Zxs_Angel.png" alt="Zxs_Angel">
+                <span>Zxs_Angel</span>
+            </button>
+
+            <button class="tarjeta-personaje" data-personaje="Yomi">
+                <img src="assets/personajes/Yomi.png" alt="Yomi">
+                <span>Yomi</span>
+            </button>
+        </div>
+
+        <p id="mensaje-seleccion">
+            Selecciona uno de los personajes para continuar.
+        </p>
+    </section>
+
+    <!-- MENÚ PRINCIPAL -->
+    <section id="menu-principal" class="oculto">
+
+        <h1>Nuestra aventura</h1>
+        <p>Elige qué aventura quieres jugar.</p>
+
+        <div id="lista-juegos">
+            <button class="boton-juego" data-juego="corazones">1. Atrapa corazones</button>
+            <button class="boton-juego" data-juego="memoria">2. Juego de memoria</button>
+            <button class="boton-juego" data-juego="laberinto">3. El laberinto</button>
+            <button class="boton-juego" data-juego="obstaculos">4. Esquiva obstáculos</button>
+            <button class="boton-juego" data-juego="preguntas">5. ¿Cuánto nos conocemos?</button>
+        </div>
+<button id="boton-rompecabezas" disabled>
+    Armar nuestro rompecabezas 🔒
+</button>
+        <p id="progreso">Piezas del rompecabezas: 0/5</p>
+        <button id="boton-sorpresa">
+    Una sorpresa para ti ♥
+</button>
+
+        <button id="boton-explorar">Explorar nuestro bosque</button>
+        <button id="boton-cambiar-personaje">Cambiar personaje</button>
+
+    </section>
+
+    <!-- EXPLORACIÓN -->
+    <section id="pantalla-juego" class="oculto">
+
+        <h2>Nuestro bosque</h2>
+        <p id="nombre-personaje"></p>
+
+        <canvas id="lienzo-juego" width="640" height="360"></canvas>
+
+        <div id="controles-moviles">
+
+            <div class="cruceta">
+                <div class="fila-cruceta">
+                    <span></span>
+                    <button data-direccion="arriba">▲</button>
+                    <span></span>
+                </div>
+
+                <div class="fila-cruceta">
+                    <button data-direccion="izquierda">◀</button>
+                    <button data-direccion="abajo">▼</button>
+                    <button data-direccion="derecha">▶</button>
+                </div>
+            </div>
+
+            <button id="boton-interactuar">A</button>
+            <button id="boton-mochila" type="button">🎒</button>
+
+        </div>
+
+        <button id="boton-volver-menu">Volver al menú</button>
+
+    </section>
+
+    <!-- MINIJUEGO 1: ATRAPA CORAZONES -->
+    <section id="pantalla-minijuego-corazones" class="oculto">
+
+        <h2>Atrapa corazones</h2>
+        <p>¡Recoge 20 corazones antes de que se acabe el tiempo!</p>
+
+        <div id="area-minijuego-corazones">
+
+            <div id="marcador-corazones">
+                <span>♥ <span id="contador-corazones">0</span>/20</span>
+                <span>Tiempo: <span id="tiempo-corazones">45</span>s</span>
+            </div>
+
+            <canvas id="lienzo-corazones" width="640" height="360"></canvas>
+
+            <div id="controles-corazones">
+                <button data-mover="izquierda">◀</button>
+                <button data-mover="derecha">▶</button>
+            </div>
+
+        </div>
+
+        <p id="mensaje-corazones"></p>
+
+        <button id="boton-salir-corazones">Volver al menú</button>
+
+    </section>
+
+    <!-- MINIJUEGO 2: MEMORIA -->
+    <section id="pantalla-minijuego-memoria" class="oculto">
+
+        <h2>Nuestros recuerdos</h2>
+
+        <p>
+            Encuentra las 6 parejas y descubre nuestros pequeños recuerdos.
+        </p>
+
+        <div id="marcador-memoria">
+            <span>
+                Parejas encontradas:
+                <span id="contador-parejas">0</span>/6
+            </span>
+        </div>
+
+        <div id="tablero-memoria">
+            <!-- Las 12 cartas se generarán mediante JavaScript -->
+        </div>
+
+        <p id="mensaje-memoria"></p>
+
+        <button id="boton-salir-memoria">
+            Volver al menú
+        </button>
+
+    </section>
+
+    <!-- MINIJUEGO 3: LABERINTO -->
+    <section id="pantalla-minijuego-laberinto" class="oculto">
+
+        <h2>Encuentra a tu persona favorita</h2>
+
+        <p>
+            Recorre el camino y encuentra al otro personaje.
+        </p>
+
+        <div id="informacion-laberinto">
+            Laberinto: <span id="numero-laberinto">1 / 4</span>
+        </div>
+
+        <canvas
+            id="lienzo-laberinto"
+            width="640"
+            height="420">
+        </canvas>
+
+        <p id="mensaje-laberinto">
+            Usa las flechas o WASD para moverte.
+        </p>
+
+        <div id="controles-laberinto">
+            <button type="button" data-laberinto-dir="arriba">▲</button>
+
+            <div class="fila-controles-laberinto">
+                <button type="button" data-laberinto-dir="izquierda">◀</button>
+                <button type="button" data-laberinto-dir="abajo">▼</button>
+                <button type="button" data-laberinto-dir="derecha">▶</button>
+            </div>
+        </div>
+
+        <button
+            type="button"
+            id="boton-otro-laberinto"
+            class="oculto">
+            Jugar otro laberinto
+        </button>
+
+        <button
+            type="button"
+            id="boton-salir-laberinto">
+            Volver al menú
+        </button>
+
+    </section>
+
+    <!-- MINIJUEGO 4: ESQUIVA OBSTÁCULOS -->
+    <section id="pantalla-minijuego-obstaculos" class="oculto">
+
+        <h2>¡Esquiva los obstáculos!</h2>
+
+        <p>
+            Salta y evita los obstáculos durante 30 segundos.
+        </p>
+
+        <div id="marcador-obstaculos">
+
+            <span>
+                Tiempo: <span id="tiempo-obstaculos">30</span>s
+            </span>
+
+            <span>
+                Vidas: <span id="vidas-obstaculos">♥ ♥ ♥</span>
+            </span>
+
+            <span>
+                Corazones: <span id="puntos-obstaculos">0</span>
+            </span>
+
+        </div>
+
+        <canvas
+            id="lienzo-obstaculos"
+            width="640"
+            height="360">
+        </canvas>
+
+        <p id="mensaje-obstaculos">
+            Pulsa ESPACIO, flecha arriba o el botón para saltar.
+        </p>
+
+        <button
+            type="button"
+            id="boton-saltar-obstaculos">
+            ¡SALTAR!
+        </button>
+
+        <button
+            type="button"
+            id="boton-reintentar-obstaculos"
+            class="oculto">
+            Jugar otra vez
+        </button>
+
+        <button
+            type="button"
+            id="boton-salir-obstaculos">
+            Volver al menú
+        </button>
+
+    </section>
+
+    <!-- MINIJUEGO 5: ¿CUÁNTO NOS CONOCEMOS? -->
+    <section id="pantalla-minijuego-preguntas" class="oculto">
+
+        <div class="area-preguntas">
+
+            <h2>¿Cuánto nos conocemos?</h2>
+
+            <div class="marcador-preguntas">
+
+                <span>
+                    Pregunta:
+                    <span id="numero-pregunta">1 / 11</span>
+                </span>
+
+                <span>
+                    Puntos:
+                    <span id="puntos-preguntas">0</span>
+                </span>
+
+            </div>
+
+            <div class="contenedor-pregunta">
+
+                <h3 id="texto-pregunta">
+                    Aquí aparecerá la pregunta.
+                </h3>
+
+                <div id="opciones-preguntas"></div>
+
+                <p id="mensaje-preguntas"></p>
+
+                <button id="boton-siguiente-pregunta">
+                    Siguiente
+                </button>
+
+            </div>
+
+            <div id="resultado-preguntas" style="display: none;">
+
+                <h2>¡Terminaste!</h2>
+
+                <p id="texto-resultado-preguntas"></p>
+
+                <button id="boton-salir-preguntas">
+                    Volver al menú
+                </button>
+
+            </div>
+
+        </div>
+
+    </section>
+<!-- ROMPECABEZAS FINAL -->
+<section id="pantalla-rompecabezas" class="oculto">
+
+    <h2>Nuestro último recuerdo</h2>
+
+    <p id="mensaje-rompecabezas">
+        Completa nuestras cinco aventuras para conseguir las piezas.
+    </p>
+
+    <div id="piezas-rompecabezas">
+        <!-- Las cinco piezas se generarán con JavaScript -->
+    </div>
+
+    <div id="tablero-rompecabezas">
+        <!-- Aquí se colocarán las piezas -->
+    </div>
+
+    <div id="final-rompecabezas" class="oculto">
+
+<div id="reproductor-final" class="oculto">
+
+    <h3>Nuestra música ♥</h3>
+
+    <p id="nombre-pista">Mi mensaje para ti</p>
+
+    <audio id="audio-final"></audio>
+
+    <div class="controles-audio">
+
+        <button id="pista-anterior">⏮</button>
+
+        <button id="reproducir-pausar">▶</button>
+
+        <button id="pista-siguiente">⏭</button>
+
+    </div>
+
+    <div class="barra-audio">
+        <span id="tiempo-actual">0:00</span>
+
+        <input
+            type="range"
+            id="barra-progreso"
+            min="0"
+            max="100"
+            value="0"
+        >
+
+        <span id="duracion-audio">0:00</span>
+    </div>
+
+</div>
+
+
+        <h2>Lo logramos, mi amor</h2>
+
+        <img
+            id="imagen-final-rompecabezas"
+            src="assets/recuerdos/final-juntos.png"
+            alt="Nuestros dos personajes tomados de la mano"
+        >
+
+        <p>
+            No importa cuántos caminos tengamos que recorrer,
+            siempre quiero que nuestro destino sea estar juntos.
+        </p>
+
+    </div>
+
+    <button id="boton-salir-rompecabezas">
+        Volver al menú
+    </button>
+
+</section>
+
+<!-- SORPRESA ESPECIAL -->
+<section id="pantalla-sorpresa" class="oculto">
+
+    <h2>Una sorpresa para ti ♥</h2>
+
+    <p>
+        Hay algo especial que quiero que descubras...
+    </p>
+
+    <div id="zona-pista-sorpresa">
+
+        <p id="texto-pista-sorpresa">
+            Yo soy tu niño..., el que siempre te saca una sonrisa.
+            Ese al que llamas de una manera muy especial...
+
+            ¿Cómo me dices, mi niña? ♥
+        </p>
+
+        <input
+            type="text"
+            id="respuesta-sorpresa"
+            placeholder="Escribe la palabra secreta..."
+            autocomplete="off"
+        >
+
+        <button id="boton-comprobar-sorpresa">
+            Descubrir sorpresa ♥
+        </button>
+
+        <p id="mensaje-sorpresa"></p>
+
+    </div>
+
+<div id="contenido-sorpresa" class="oculto">
+
+    <h2>¡Lo encontraste, mi niña! ♥</h2>
+
+    <h3>Felices dos meses, mi amor.</h3>
+
+    <p>
+        ¡Qué orgullo poder decir que hoy cumplimos dos meses!
+        Ya, es oficial todo: dos meses junto a ti; dos meses que
+        han sido increíbles gracias a ti.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Dos meses en donde, cuando llega la hora de dormir, me
+        pone triste. La hora de despedirnos es la que menos me gusta.
+        En fin, han sido dos meses y espero que contigo hagamos
+        que se vuelvan años, y sean demasiados.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Desde que llegaste a mi vida me has hecho tan feliz que,
+        perdóname, pero no puedo describir con palabras lo mucho
+        que amo esta relación. Es una sensación, un sentimiento,
+        algo... pero ese algo es tan bonito.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Junto a ti me siento protegido, me siento apartado de la
+        maldad del mundo. Contigo estoy en un paraíso.
+        De verdad anhelo con todo mi ser poder vernos, poder estar
+        juntos, porque te lo juro que si a distancia soy demasiado
+        feliz, contigo en persona me tendrías a tus pies.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Me gustas tanto, mi niña, y créeme que no creí sentir ese
+        sentimiento por alguien en mucho tiempo, pero me equivoqué
+        y qué lindo haberlo hecho.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Eres la razón por la que cada día quiero mejorar en todos
+        los aspectos posibles. Quiero ser un buen novio. Sé que a
+        veces cometo errores, pero es por la inexperiencia, mi niña,
+        y contigo he aprendido mucho. Sé cómo tratarte bien,
+        de una manera muy bonita.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Y bueno, tú sacaste una parte de mí que ni conocía,
+        esa parte cariñosa que creí que no tenía.
+        Eres lo mejor, mi vida. ¿De qué? Pues del mundo,
+        porque no te imaginas cómo me has cambiado desde el día
+        en que nos conocimos.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Te agradezco no juzgarme, escucharme, entenderme y a veces
+        darme esa fuerza que necesito para tener un buen día
+        emocionalmente. Aunque contigo mis días son y serán
+        perfectos hasta el último.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Gracias por tenerme paciencia. Sé que no expreso siempre
+        lo que siento, pero siempre recuerda que te amo
+        infinitamente.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Me gusta, me encanta cada parte de ti, de tu ser,
+        todo, mi amor. TODO.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <p>
+        Me hace feliz ser tu novio y poder decir que cumplimos
+        dos mesecitos y, bueno, los que faltan.
+    </p>
+    <p>💕💕💕💕💕💕💕💕💕</p>
+
+    <h2>¡Tú y yo por siempre, para siempre y solo tú y yo, mi niña!</h2>
+
+    <h2>TE AMOOOO ♥</h2>
+
+</div>
+
+        </p>
+
+    </div>
+
+    <button id="boton-salir-sorpresa">
+        Volver al menú
+    </button>
+
+</section>
+
+</main>
+
+<audio id="musica-fondo" src="assets/recuerdos/musica-fondo.mp3" loop preload="auto"></audio>
+<script src="script.js"></script>
+
+<script>
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./service-worker.js")
+            .then(() => console.log("Our Little World está preparado."))
+            .catch(error => console.error("Error al registrar la aplicación:", error));
+    });
+}
+</script>
+
+</body>
+</html>
